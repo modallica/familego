@@ -1,0 +1,120 @@
+{
+  "source_archive": "auto-mob.zip",
+  "assets": [
+    {
+      "path": "assets/originals/3.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/auto-mob.webp",
+      "role": "vehicles / mobile"
+    },
+    {
+      "path": "assets/originals/bat.mp4",
+      "role": "Batman tile video"
+    },
+    {
+      "path": "assets/originals/bg-header.webp",
+      "role": "hero / desktop"
+    },
+    {
+      "path": "assets/originals/big.webp",
+      "role": "Colosseum tile"
+    },
+    {
+      "path": "assets/originals/bigfig.webp",
+      "role": "Bigfig promo"
+    },
+    {
+      "path": "assets/originals/cafe-with-lights.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/city.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/cloud.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/desk.webp",
+      "role": "provided but unused: damaged source; desktop keeps prior video artwork"
+    },
+    {
+      "path": "assets/originals/f1.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/f2.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/f3.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/f4.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/f5.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/flowers.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/friends.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/harry-mob.webp",
+      "role": "Harry Potter category / mobile"
+    },
+    {
+      "path": "assets/originals/harry-potter.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/header-mob.webp",
+      "role": "hero / mobile"
+    },
+    {
+      "path": "assets/originals/hp-galleon.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/memari-desk.webp",
+      "role": "architecture / desktop"
+    },
+    {
+      "path": "assets/originals/memari-mob.webp",
+      "role": "architecture / mobile"
+    },
+    {
+      "path": "assets/originals/minecraft.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/minifig.webp",
+      "role": "Minifigure promo"
+    },
+    {
+      "path": "assets/originals/ninja-lego.webp",
+      "role": "original category or decorative artwork"
+    },
+    {
+      "path": "assets/originals/star-wars.webp",
+      "role": "original category or decorative artwork"
+    }
+  ],
+  "derived": [
+    {
+      "path": "assets/images/batman-poster.webp",
+      "source": "assets/originals/bat.mp4",
+      "frame_time_seconds": 1
+    }
+  ]
+}

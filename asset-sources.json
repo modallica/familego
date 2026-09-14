@@ -1,0 +1,492 @@
+[
+  {
+    "asset": "logo.webp",
+    "video_frame": "0-1",
+    "crop": [
+      1423,
+      158,
+      112,
+      63
+    ]
+  },
+  {
+    "asset": "hero-left.webp",
+    "video_frame": "0-7",
+    "crop": [
+      1,
+      226,
+      820,
+      756
+    ]
+  },
+  {
+    "asset": "hero-ground.webp",
+    "video_frame": "0-7",
+    "crop": [
+      821,
+      607,
+      836,
+      375
+    ]
+  },
+  {
+    "asset": "hero-dino.webp",
+    "video_frame": "0-7",
+    "crop": [
+      1110,
+      586,
+      290,
+      75
+    ]
+  },
+  {
+    "asset": "cloud.webp",
+    "video_frame": "0-7",
+    "crop": [
+      1260,
+      238,
+      191,
+      120
+    ]
+  },
+  {
+    "asset": "balloon.webp",
+    "video_frame": "0-7",
+    "crop": [
+      1442,
+      240,
+      145,
+      357
+    ]
+  },
+  {
+    "asset": "category-0.webp",
+    "video_frame": "0-11",
+    "crop": [
+      129,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-1.webp",
+    "video_frame": "0-11",
+    "crop": [
+      330,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-2.webp",
+    "video_frame": "0-11",
+    "crop": [
+      532,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-3.webp",
+    "video_frame": "0-11",
+    "crop": [
+      733,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-4.webp",
+    "video_frame": "0-11",
+    "crop": [
+      935,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-5.webp",
+    "video_frame": "0-11",
+    "crop": [
+      1136,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "category-6.webp",
+    "video_frame": "0-11",
+    "crop": [
+      1338,
+      476,
+      191,
+      217
+    ]
+  },
+  {
+    "asset": "colosseum.webp",
+    "video_frame": "0-18.7",
+    "crop": [
+      149,
+      237,
+      675,
+      660
+    ]
+  },
+  {
+    "asset": "tower-scene.webp",
+    "video_frame": "0-18.7",
+    "crop": [
+      834,
+      237,
+      333,
+      326
+    ]
+  },
+  {
+    "asset": "batman-scene.webp",
+    "video_frame": "0-18.7",
+    "crop": [
+      1177,
+      237,
+      332,
+      326
+    ]
+  },
+  {
+    "asset": "spaceship-scene.webp",
+    "video_frame": "0-18.7",
+    "crop": [
+      834,
+      573,
+      333,
+      324
+    ]
+  },
+  {
+    "asset": "cafe-scene.webp",
+    "video_frame": "0-18.7",
+    "crop": [
+      1177,
+      573,
+      332,
+      324
+    ]
+  },
+  {
+    "asset": "vehicles-art.webp",
+    "video_frame": "0-30.5",
+    "crop": [
+      190,
+      226,
+      982,
+      600
+    ]
+  },
+  {
+    "asset": "vehicles-title.webp",
+    "video_frame": "0-30.5",
+    "crop": [
+      881,
+      350,
+      677,
+      126
+    ]
+  },
+  {
+    "asset": "mini-art.webp",
+    "video_frame": "0-32",
+    "crop": [
+      129,
+      506,
+      414,
+      262
+    ]
+  },
+  {
+    "asset": "big-art.webp",
+    "video_frame": "0-32",
+    "crop": [
+      834,
+      506,
+      414,
+      262
+    ]
+  },
+  {
+    "asset": "architecture-art.webp",
+    "video_frame": "0-36",
+    "crop": [
+      180,
+      343,
+      965,
+      528
+    ]
+  },
+  {
+    "asset": "trust.webp",
+    "video_frame": "0-41",
+    "crop": [
+      148,
+      659,
+      431,
+      164
+    ]
+  },
+  {
+    "asset": "customer-0.webp",
+    "video_frame": "0-41",
+    "crop": [
+      1251,
+      314,
+      73,
+      72
+    ]
+  },
+  {
+    "asset": "customer-1.webp",
+    "video_frame": "0-41",
+    "crop": [
+      802,
+      314,
+      54,
+      72
+    ]
+  },
+  {
+    "asset": "customer-2.webp",
+    "video_frame": "0-41",
+    "crop": [
+      327,
+      305,
+      89,
+      89
+    ]
+  },
+  {
+    "asset": "product-0.webp",
+    "video_frame": "1-0",
+    "crop": [
+      957,
+      606,
+      236,
+      205
+    ]
+  },
+  {
+    "asset": "product-1.webp",
+    "video_frame": "1-0",
+    "crop": [
+      685,
+      606,
+      236,
+      205
+    ]
+  },
+  {
+    "asset": "product-2.webp",
+    "video_frame": "1-0",
+    "crop": [
+      413,
+      606,
+      236,
+      205
+    ]
+  },
+  {
+    "asset": "product-3.webp",
+    "video_frame": "1-0",
+    "crop": [
+      142,
+      606,
+      236,
+      205
+    ]
+  },
+  {
+    "asset": "product-4.webp",
+    "video_frame": "1-22.5",
+    "crop": [
+      957,
+      531,
+      236,
+      208
+    ]
+  },
+  {
+    "asset": "product-5.webp",
+    "video_frame": "1-22.5",
+    "crop": [
+      685,
+      531,
+      236,
+      208
+    ]
+  },
+  {
+    "asset": "product-6.webp",
+    "video_frame": "1-22.5",
+    "crop": [
+      413,
+      531,
+      236,
+      208
+    ]
+  },
+  {
+    "asset": "product-7.webp",
+    "video_frame": "1-22.5",
+    "crop": [
+      142,
+      531,
+      236,
+      208
+    ]
+  },
+  {
+    "asset": "product-8.webp",
+    "video_frame": "1-29",
+    "crop": [
+      957,
+      568,
+      236,
+      222
+    ]
+  },
+  {
+    "asset": "product-9.webp",
+    "video_frame": "1-29",
+    "crop": [
+      685,
+      568,
+      236,
+      222
+    ]
+  },
+  {
+    "asset": "product-10.webp",
+    "video_frame": "1-29",
+    "crop": [
+      413,
+      568,
+      236,
+      222
+    ]
+  },
+  {
+    "asset": "product-11.webp",
+    "video_frame": "1-29",
+    "crop": [
+      142,
+      568,
+      236,
+      222
+    ]
+  },
+  {
+    "asset": "product-2-alt.webp",
+    "video_frame": "1-4.5",
+    "crop": [
+      420,
+      590,
+      220,
+      219
+    ]
+  },
+  {
+    "asset": "product-4-alt.webp",
+    "video_frame": "1-24.5",
+    "crop": [
+      961,
+      561,
+      232,
+      206
+    ]
+  },
+  {
+    "asset": "han.webp",
+    "video_frame": "0-14",
+    "crop": [
+      160,
+      607,
+      219,
+      210
+    ]
+  },
+  {
+    "asset": "creeper.webp",
+    "video_frame": "0-14",
+    "crop": [
+      443,
+      607,
+      219,
+      210
+    ]
+  },
+  {
+    "asset": "voldemort.webp",
+    "video_frame": "0-14",
+    "crop": [
+      727,
+      607,
+      219,
+      210
+    ]
+  },
+  {
+    "asset": "shell.webp",
+    "video_frame": "0-14",
+    "crop": [
+      1008,
+      607,
+      219,
+      210
+    ]
+  },
+  {
+    "asset": "military.webp",
+    "video_frame": "0-23",
+    "crop": [
+      153,
+      320,
+      222,
+      223
+    ]
+  },
+  {
+    "asset": "shop.webp",
+    "video_frame": "0-23",
+    "crop": [
+      436,
+      320,
+      222,
+      223
+    ]
+  },
+  {
+    "asset": "minecraft.webp",
+    "video_frame": "0-23",
+    "crop": [
+      999,
+      320,
+      222,
+      223
+    ]
+  },
+  {
+    "asset": "bike.webp",
+    "video_frame": "0-23",
+    "crop": [
+      1282,
+      320,
+      222,
+      223
+    ]
+  }
+]
