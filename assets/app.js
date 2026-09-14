@@ -35,6 +35,25 @@
   function showDialog(element) {
     if (!element.open) element.showModal();
   }
+  /* Keep every button bound to one product in sync, whichever view it lives in
+     (card, quick view dialog, favorites list or the single product page). */
+  function labelFavorite(id,on) {
+    $$(`[data-favorite="${id}"]`).forEach(button=>{
+      button.setAttribute('aria-pressed',String(on));
+      if (button.classList.contains('icon-only')) {
+        button.setAttribute('aria-label',on?'حذف از علاقه‌مندی‌ها':'افزودن به علاقه‌مندی‌ها');
+        button.setAttribute('title',on?'در علاقه‌مندی‌ها':'افزودن به علاقه‌مندی‌ها');
+      } else {
+        button.textContent=on?'حذف از علاقه‌مندی‌ها':'افزودن به علاقه‌مندی‌ها';
+      }
+    });
+  }
+  function labelCompare(id,on) {
+    $$(`[data-compare="${id}"]`).forEach(button=>{
+      button.setAttribute('aria-pressed',String(on));
+      if (button.classList.contains('icon-only')) button.setAttribute('title',on?'در فهرست مقایسه':'افزودن به مقایسه');
+    });
+  }
   function specs(product) {
     if (!product.pieces) return '';
     return `<div class="card-specs">${[
@@ -51,14 +70,16 @@
     const deal = mode === 'deal';
     const discount = product.oldPrice ? Math.round((1-product.price/product.oldPrice)*100) : 0;
     let offer = '';
-    if (deal) offer = `<div class="offer-line"><span class="discount-badge">${fa(discount)}٪</span><span class="countdown" data-countdown>۰۰ : ۰۴ : ۳۰ : ۰۰</span></div>`;
+    /* A reference product is discounted by 10,000 of 32,880,000, which rounds to
+       0%: never print a "۰٪" badge, keep the countdown line for layout. */
+    if (deal) offer = `<div class="offer-line">${discount > 0 ? `<span class="discount-badge">${fa(discount)}٪</span>` : ''}<span class="countdown" data-countdown>۰۰ : ۰۴ : ۳۰ : ۰۰</span></div>`;
     else if (mode === 'archive') offer = `<div class="offer-line ${product.sale ? '' : 'placeholder'}"><span>پیشنهاد ویژه :</span><span class="countdown" data-countdown>۰۰:۰۴:۳۰:۰۰</span></div>`;
     return `<article class="product-card ${deal ? 'deal-card' : ''}" data-product-id="${product.id}">
       ${offer}<button class="product-photo ${product.altImage ? 'has-alt' : ''}" data-quick="${product.id}" aria-label="نمایش ${escapeHTML(product.name)}">
       <img class="primary" src="${img(product.image)}" alt="${escapeHTML(product.name)}" loading="lazy" width="236" height="222">
       ${product.altImage ? `<img class="secondary" src="${img(product.altImage)}" alt="بسته‌بندی ${escapeHTML(product.name)}" loading="lazy" width="236" height="222">` : ''}</button>
       ${mode === 'archive' ? specs(product) : ''}
-      <h3 class="card-title"><button data-quick="${product.id}">${escapeHTML(product.name)}</button></h3>
+      <h3 class="card-title"><a href="product.html?id=${product.id}">${escapeHTML(product.name)}</a></h3>
       <div class="card-bottom">${price(product)}${deal ? '<span class="buy-caption">همین حالا<br><strong>بخرش</strong></span>' : ''}<button class="add-to-cart" data-add="${product.id}" aria-label="افزودن ${escapeHTML(product.name)} به سبد">${icon(deal ? 'basket' : 'cart')}</button></div>
     </article>`;
   }
@@ -79,19 +100,20 @@
     $('.cart-total').innerHTML = `<span>جمع سبد خرید</span><strong>${fa(cart.reduce((sum,row) => sum+findProduct(row.id).price*row.quantity,0))} تومان</strong>`;
     saveStorage('famito-html-cart-v1', cart);
   }
-  function addToCart(id) {
+  function addToCart(id, quantity = 1) {
     const product = findProduct(id);
     if (!product) return;
+    const wanted = Math.max(1,Math.min(99,Number(quantity) || 1));
     const row = cart.find(item => item.id === product.id);
-    if (row && row.quantity >= 99) return toast('حداکثر تعداد نمایشی هر محصول ۹۹ عدد است.');
-    if (row) row.quantity++; else cart.push({id:product.id,quantity:1});
+    if ((row ? row.quantity : 0)+wanted > 99) return toast('حداکثر تعداد نمایشی هر محصول ۹۹ عدد است.');
+    if (row) row.quantity += wanted; else cart.push({id:product.id,quantity:wanted});
     renderCart();
     toast('محصول به سبد خرید اضافه شد.');
   }
   function quickView(id) {
     const product = findProduct(id);
     if (!product) return;
-    $('.quick-content').innerHTML = `<img src="${img(product.image)}" alt="${escapeHTML(product.name)}"><div><h3>${escapeHTML(product.name)}</h3>${specs(product)}${price(product)}<button class="add-to-cart" data-add="${product.id}">${icon('cart')}افزودن به سبد خرید</button><button class="quick-favorite" data-favorite="${product.id}" aria-pressed="${favorites.includes(product.id)}">${favorites.includes(product.id) ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'}</button><br><button class="quick-favorite" data-compare="${product.id}">افزودن به مقایسه</button></div>`;
+    $('.quick-content').innerHTML = `<img src="${img(product.image)}" alt="${escapeHTML(product.name)}"><div><h3>${escapeHTML(product.name)}</h3>${specs(product)}${price(product)}<button class="add-to-cart" data-add="${product.id}">${icon('cart')}افزودن به سبد خرید</button><button class="quick-favorite" data-favorite="${product.id}" aria-pressed="${favorites.includes(product.id)}">${favorites.includes(product.id) ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'}</button><br><button class="quick-favorite" data-compare="${product.id}">افزودن به مقایسه</button><a class="quick-page-link" href="product.html?id=${product.id}">مشاهده صفحه کامل محصول<span aria-hidden="true">‹</span></a></div>`;
     showDialog($('.quick-dialog'));
   }
   function info(title, html) {
@@ -269,7 +291,10 @@
   document.addEventListener('click',event=>{
     const button=event.target.closest('button');
     if (!button) return;
-    if (button.dataset.add) addToCart(button.dataset.add);
+    if (button.dataset.add) {
+      const field = button.dataset.qty ? document.getElementById(button.dataset.qty) : null;
+      addToCart(button.dataset.add, field ? field.value : 1);
+    }
     if (button.hasAttribute('data-open-cart')) {renderCart();showDialog($('.cart-dialog'));}
     if (button.dataset.quick) quickView(button.dataset.quick);
     if (button.dataset.quantity) {
@@ -283,25 +308,27 @@
     if (button.hasAttribute('data-open-favorites')) showFavorites();
     if (button.dataset.favorite) {
       const id=Number(button.dataset.favorite);
-      favorites=favorites.includes(id)?favorites.filter(value=>value!==id):[...favorites,id];
+      const on=!favorites.includes(id);
+      favorites=on?[...favorites,id]:favorites.filter(value=>value!==id);
       saveStorage('famito-html-favorites-v1',favorites);
-      button.textContent=favorites.includes(id)?'حذف از علاقه‌مندی‌ها':'افزودن به علاقه‌مندی‌ها';
-      button.setAttribute('aria-pressed',String(favorites.includes(id)));
-      toast(favorites.includes(id)?'محصول ذخیره شد.':'محصول از علاقه‌مندی‌ها حذف شد.');
+      labelFavorite(id,on);
+      toast(on?'محصول ذخیره شد.':'محصول از علاقه‌مندی‌ها حذف شد.');
       if (button.closest('.favorites-list')) showFavorites();
     }
     if (button.dataset.compare) {
       const id=Number(button.dataset.compare);
       if (compare.includes(id)) return toast('این محصول در فهرست مقایسه است.');
       if (compare.length>=3) return toast('حداکثر سه محصول قابل مقایسه است.');
-      compare.push(id);toast('محصول به مقایسه اضافه شد.');
+      compare.push(id);labelCompare(id,true);toast('محصول به مقایسه اضافه شد.');
     }
     if (button.dataset.uncompare) {compare=compare.filter(id=>id!==Number(button.dataset.uncompare));showCompare();}
     if (button.dataset.info) {
       const messages={
         account:['حساب کاربری','این مرحله، بازسازی HTML صفحه اصلی و آرشیو است. ورود و حساب کاربری در مرحله اتصال به وردپرس فعال می‌شود.'],
         terms:['قوانین و مقررات','محتوای قوانین فروشگاه در ویدیو مشخص نیست و در این پیش‌نمایش درج نشده است.'],
-        social:['شبکه‌های اجتماعی','آدرس شبکه‌های اجتماعی در فایل‌های مرجع مشخص نیست. لینک نهایی در مرحله بعد اضافه می‌شود.']
+        social:['شبکه‌های اجتماعی','آدرس شبکه‌های اجتماعی در فایل‌های مرجع مشخص نیست. لینک نهایی در مرحله بعد اضافه می‌شود.'],
+        reviews:['نظرات کاربران','ثبت نظر و امتیاز کاربران به اتصال به وردپرس و ووکامرس نیاز دارد؛ در این پیش‌نمایش HTML فعال نیست.'],
+        share:['اشتراک‌گذاری','لینک همین صفحه را می‌توانید از نوار نشانی مرورگر کپی کنید. دکمه‌های اشتراک شبکه‌ها پس از مشخص شدن آدرس آن‌ها اضافه می‌شوند.']
       };
       if (button.dataset.info==='compare') showCompare();
       else {const message=messages[button.dataset.info];if(message)info(message[0],`<p>${message[1]}</p>`);}
@@ -383,5 +410,178 @@
     const text=values.map(value=>String(value).padStart(2,'0').replace(/\d/g,digit=>'۰۱۲۳۴۵۶۷۸۹'[digit])).join(' : ');
     $$('[data-countdown]').forEach(el=>{el.textContent=text;});
   }
+  /* ------------------------------------------------------------------
+     Single product page (product.html?id=N)
+     ------------------------------------------------------------------ */
+  const singleRoot = $('#single-product');
+  if (singleRoot) {
+    const crumb = $('#breadcrumb');
+    const relatedSection = $('#related-section');
+    const missingBox = $('#product-missing');
+    const pageCategories = Object.fromEntries([...categories.map(category=>[category.id,category.name]),
+      ['batman','لگو بتمن'],['vehicles','لگو وسایل نقلیه'],['rings','لگو ارباب حلقه‌ها'],
+      ['ninja','لگو لاک‌پشت نینجا'],['flowers','لگو گل‌ها'],['minecraft','لگو ماینکرافت']]);
+    const brandOf = product => product.brand === 'bt' ? 'BT' : 'سایر برندها';
+    const skuOf = product => {
+      const found = /کد\s*([A-Za-z0-9][A-Za-z0-9.\-]*)/.exec(product.name);
+      return found ? found[1] : '';
+    };
+    const galleryOf = product => {
+      const frames = [{src:img(product.image),alt:product.name,width:236,height:222}];
+      if (product.altImage) frames.push({src:img(product.altImage),alt:`بسته‌بندی ${product.name}`,width:232,height:219});
+      (product.gallery || []).forEach(entry=>frames.push({src:original(entry.file),alt:entry.alt || product.name,width:entry.width || 800,height:entry.height || 800}));
+      return frames;
+    };
+    let gallery = [];
+
+    function describe(product,categoryLabel,sku) {
+      return [
+        `«${product.name}» از مجموعه محصولات ${categoryLabel} فروشگاه فمیتو لگو است.`,
+        product.pieces
+          ? `این مجموعه از ${fa(product.pieces)} قطعه ساخته می‌شود${product.figures ? ` و ${fa(product.figures)} فیگور اختصاصی دارد` : ''}${product.age ? ` و برای رده سنی ${fa(product.age)} سال به بالا مناسب است` : ''}. چیدن قطعه‌ها برای نوجوانان و بزرگ‌سالانی که به سازه‌های پرجزئیات علاقه دارند انتخاب مناسبی است.`
+          : 'این محصول یک فیگور کلکسیونی است و برای کامل کردن مجموعه‌های نمایشی و چیدمان ویترینی به کار می‌رود.',
+        'قطعات از پلاستیک ABS ساخته شده‌اند و با قطعه‌های هم‌اندازه مجموعه‌های ساختنی دیگر جور می‌شوند.',
+        sku ? `کد ثبت‌شده این محصول در فروشگاه ${sku} است.` : ''
+      ].filter(Boolean).join(' ');
+    }
+    function assurance() {
+      return `<ul class="pd-assurance">${[
+        ['shield','ضمانت اصالت کالا','قطعات مطابق نمونه اصلی و استاندارد ABS'],
+        ['truck','ارسال به سراسر کشور','تحویل حضوری از فروشگاه اصفهان یا ارسال پستی'],
+        ['return','هفت روز مهلت بازگشت','در صورت عدم تطابق با مشخصات درج‌شده'],
+        ['headset','پشتیبانی خرید','پاسخ‌گویی تلفنی در ساعات کاری فروشگاه']
+      ].map(([name,title,text])=>`<li>${icon(name)}<span><b>${title}</b>${text}</span></li>`).join('')}</ul>`;
+    }
+    function renderProduct(product) {
+      gallery = galleryOf(product);
+      const sku = skuOf(product);
+      const categoryLabel = pageCategories[product.category] || product.category;
+      const discount = product.oldPrice ? Math.round((1-product.price/product.oldPrice)*100) : 0;
+      const isFavorite = favorites.includes(product.id);
+      const inCompare = compare.includes(product.id);
+      document.title = `${product.name} | فمیتو لگو`;
+      const meta = document.querySelector('meta[name="description"]');
+      if (meta) meta.setAttribute('content',`خرید ${product.name} از فروشگاه فمیتو لگو با قیمت ${fa(product.price)} تومان.`);
+      crumb.innerHTML = `<a href="index.html">خانه</a><span class="sep" aria-hidden="true">‹</span><a href="archive.html">فروشگاه</a><span class="sep" aria-hidden="true">‹</span><a href="archive.html?category=${product.category}">${escapeHTML(categoryLabel)}</a><span class="sep" aria-hidden="true">‹</span><span aria-current="page">${escapeHTML(product.name)}</span>`;
+      singleRoot.innerHTML = `
+      <div class="pd-gallery">
+        <div class="pd-stage">${discount > 0 ? `<span class="pd-badge">${fa(discount)}٪ تخفیف</span>` : ''}<img id="pd-image" src="${gallery[0].src}" alt="${escapeHTML(gallery[0].alt)}" width="${gallery[0].width}" height="${gallery[0].height}" fetchpriority="high"></div>
+        ${gallery.length > 1 ? `<div class="pd-thumbs" role="group" aria-label="تصاویر ${escapeHTML(product.name)}">${gallery.map((frame,index)=>`<button type="button" data-thumb="${index}" aria-current="${index === 0}" aria-label="تصویر ${fa(index+1)} از ${fa(gallery.length)}"><img src="${frame.src}" alt="" width="${frame.width}" height="${frame.height}" loading="lazy"></button>`).join('')}</div>` : ''}
+        ${gallery.every(frame=>frame.width < 600) ? '<p class="pd-photo-note">کیفیت تصویر این محصول محدود به فریم استخراج‌شده از ویدیوی مرجع است؛ با جای‌گذاری عکس اصلی، همین گالری با کیفیت کامل نمایش داده می‌شود.</p>' : ''}
+      </div>
+      <div class="pd-buy">
+        <h1 class="pd-name">${escapeHTML(product.name)}</h1>
+        <div class="pd-meta">
+          <span>کد محصول: <b>${sku ? escapeHTML(sku) : '—'}</b></span>
+          <span>برند: <b>${escapeHTML(brandOf(product))}</b></span>
+          <span>دسته‌بندی: <b><a href="archive.html?category=${product.category}">${escapeHTML(categoryLabel)}</a></b></span>
+          <span class="pd-stock ${product.stock ? 'in' : 'out'}">${product.stock ? 'موجود در انبار' : 'ناموجود'}</span>
+        </div>
+        ${specs(product)}
+        <div class="pd-price-box">
+          <div class="pd-price-row">
+            <div class="pd-price-main">${product.oldPrice ? `<del class="pd-old">${fa(product.oldPrice)}</del>` : ''}<span class="pd-price">${fa(product.price)}<small>تومان</small></span></div>
+            ${product.oldPrice ? `<span class="pd-save">سود شما ${fa(product.oldPrice-product.price)} تومان</span>` : ''}
+          </div>
+          ${product.sale ? `<div class="pd-countdown"><span>پایان پیشنهاد ویژه :</span><span class="countdown" data-countdown>۰۰ : ۰۴ : ۳۰ : ۰۰</span></div>` : ''}
+        </div>
+        <div class="pd-actions">
+          <div class="pd-qty"><button type="button" data-step="1" aria-label="افزایش تعداد">+</button><input id="pd-qty" type="number" value="1" min="1" max="99" step="1" inputmode="numeric" aria-label="تعداد سفارش"><button type="button" data-step="-1" aria-label="کاهش تعداد">−</button></div>
+          <button class="pd-add" data-add="${product.id}" data-qty="pd-qty" ${product.stock ? '' : 'disabled'}>${icon('basket')}افزودن به سبد خرید</button>
+          <button class="pd-icon-btn icon-only" data-favorite="${product.id}" aria-pressed="${isFavorite}" aria-label="${isFavorite ? 'حذف از علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'}" title="${isFavorite ? 'در علاقه‌مندی‌ها' : 'افزودن به علاقه‌مندی‌ها'}">${icon('heart')}</button>
+          <button class="pd-icon-btn icon-only" data-compare="${product.id}" aria-pressed="${inCompare}" aria-label="افزودن به مقایسه" title="${inCompare ? 'در فهرست مقایسه' : 'افزودن به مقایسه'}">${icon('compare')}</button>
+          <button class="pd-icon-btn icon-only" data-info="share" aria-label="اشتراک‌گذاری" title="اشتراک‌گذاری">${icon('share')}</button>
+        </div>
+        ${assurance()}
+      </div>
+      <div class="pd-tabs">
+        <div class="pd-tablist" role="tablist" aria-label="بخش‌های اطلاعات محصول">
+          <button type="button" role="tab" id="pd-tab-desc" data-tab="desc" aria-controls="pd-panel-desc" aria-selected="true" tabindex="0">توضیحات محصول</button>
+          <button type="button" role="tab" id="pd-tab-specs" data-tab="specs" aria-controls="pd-panel-specs" aria-selected="false" tabindex="-1">مشخصات فنی</button>
+          <button type="button" role="tab" id="pd-tab-reviews" data-tab="reviews" aria-controls="pd-panel-reviews" aria-selected="false" tabindex="-1">نظرات کاربران</button>
+        </div>
+        <div class="pd-panel" role="tabpanel" id="pd-panel-desc" data-panel="desc" aria-labelledby="pd-tab-desc" tabindex="0">
+          <p>${escapeHTML(describe(product,categoryLabel,sku))}</p>
+          <p class="demo-note">متن توضیحات در این پیش‌نمایش از مشخصات ثبت‌شده همین محصول ساخته می‌شود. توضیح اصلی، ویدیو و تصاویر بیشتر باید در مرحله اتصال از ووکامرس خوانده شوند.</p>
+        </div>
+        <div class="pd-panel" role="tabpanel" id="pd-panel-specs" data-panel="specs" aria-labelledby="pd-tab-specs" tabindex="0" hidden>
+          <table class="pd-spec-table"><tbody>${[
+            ['نام محصول',product.name],['کد محصول',sku || '—'],['برند',brandOf(product)],['دسته‌بندی',categoryLabel],
+            ['تعداد قطعات',product.pieces ? fa(product.pieces) : '—'],['تعداد فیگور',product.figures ? fa(product.figures) : '—'],
+            ['رده سنی',product.age ? `${fa(product.age)}+ سال` : '—'],['جنس قطعات','پلاستیک ABS'],
+            ['وضعیت موجودی',product.stock ? 'موجود در انبار' : 'ناموجود'],['قیمت',`${fa(product.price)} تومان`]
+          ].map(([label,value])=>`<tr><th scope="row">${escapeHTML(label)}</th><td>${escapeHTML(value)}</td></tr>`).join('')}</tbody></table>
+        </div>
+        <div class="pd-panel" role="tabpanel" id="pd-panel-reviews" data-panel="reviews" aria-labelledby="pd-tab-reviews" tabindex="0" hidden>
+          <div class="pd-reviews-empty"><p>هنوز نظر یا امتیازی برای این محصول ثبت نشده است.</p><button class="pd-review-button" data-info="reviews">ثبت نظر و امتیاز</button><p class="demo-note">امتیاز و نظر کاربران به حساب کاربری و ووکامرس متصل نیست؛ این بخش پس از اتصال فعال می‌شود.</p></div>
+        </div>
+      </div>`;
+      selectTab('desc');
+    }
+    function selectImage(index) {
+      const frame = gallery[index];
+      if (!frame) return;
+      const stage = $('#pd-image');
+      stage.src = frame.src;
+      stage.alt = frame.alt;
+      stage.width = frame.width;
+      stage.height = frame.height;
+      $$('.pd-thumbs button').forEach((button,position)=>button.setAttribute('aria-current',String(position === index)));
+    }
+    function selectTab(key) {
+      const tabs = $$('.pd-tablist [role="tab"]');
+      tabs.forEach(tab=>{
+        const on = tab.dataset.tab === key;
+        tab.setAttribute('aria-selected',String(on));
+        tab.tabIndex = on ? 0 : -1;
+      });
+      $$('.pd-panel').forEach(panel=>{ panel.hidden = panel.dataset.panel !== key; });
+    }
+    function relatedTo(product) {
+      const same = products.filter(item=>item.id !== product.id && item.category === product.category);
+      const rest = products.filter(item=>item.id !== product.id && item.category !== product.category)
+        .sort((a,b)=>Math.abs(a.price-product.price)-Math.abs(b.price-product.price));
+      return [...same,...rest].slice(0,10);
+    }
+    singleRoot.addEventListener('click',event=>{
+      const step = event.target.closest('[data-step]');
+      if (step) {
+        const field = $('#pd-qty');
+        field.value = String(Math.min(99,Math.max(1,(parseInt(field.value,10) || 1)+Number(step.dataset.step))));
+        return;
+      }
+      const thumb = event.target.closest('[data-thumb]');
+      if (thumb) return selectImage(Number(thumb.dataset.thumb));
+      const tab = event.target.closest('[role="tab"]');
+      if (tab) selectTab(tab.dataset.tab);
+    });
+    singleRoot.addEventListener('keydown',event=>{
+      const tab = event.target.closest('[role="tab"]');
+      if (!tab || !['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      const tabs = $$('.pd-tablist [role="tab"]');
+      const here = tabs.indexOf(tab);
+      const move = {ArrowLeft:1,ArrowRight:-1}[event.key];
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length-1 : (here+move+tabs.length)%tabs.length;
+      event.preventDefault();
+      tabs[next].focus();
+      selectTab(tabs[next].dataset.tab);
+    });
+    const requested = new URLSearchParams(location.search);
+    const product = findProduct(requested.get('id') || requested.get('product') || 0);
+    if (product) {
+      missingBox.hidden = true;
+      renderProduct(product);
+      $('#related-track').innerHTML = relatedTo(product).map(item=>productCard(item,'simple')).join('');
+      relatedSection.hidden = false;
+    } else {
+      singleRoot.hidden = true;
+      relatedSection.hidden = true;
+      missingBox.hidden = false;
+      crumb.innerHTML = `<a href="index.html">خانه</a><span class="sep" aria-hidden="true">‹</span><a href="archive.html">فروشگاه</a><span class="sep" aria-hidden="true">‹</span><span aria-current="page">محصول پیدا نشد</span>`;
+      document.title = 'محصول پیدا نشد | فمیتو لگو';
+      toast('محصول خواسته‌شده در داده‌های این بسته نیست.');
+    }
+  }
+
   renderCart();tick();setInterval(tick,1000);
 })();
