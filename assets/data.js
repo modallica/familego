@@ -8,7 +8,7 @@ window.LEGO_PRODUCTS = [
   {id:2,name:'لگو قلعه هاگوارتز ۶۰۲۰ قطعه کد NO.70068',image:'product-1',price:32870000,oldPrice:32880000,pieces:6020,age:6,figures:4,category:'harry',brand:'other',stock:true,sale:true},
   {id:3,name:'لگو برج سیاه بارادور ۵۴۷۱ قطعه کد NO.66333',image:'product-2',altImage:'product-2-alt',price:33000000,pieces:5471,age:18,figures:12,category:'rings',brand:'other',stock:true},
   {id:4,name:'لگو برج هری پاتر ۴۸۰۳ قطعه کد NO.88025',image:'product-3',gallery:[{file:'hp-galleon.webp',alt:'لگو برج هری پاتر، نمای کامل سازه',width:800,height:800}],price:29480000,pieces:4803,age:18,figures:16,category:'harry',brand:'other',stock:true},
-  {id:5,name:'لگو غار بتمن ۳۹۸۱ قطعه کد NO.87085',image:'product-4',altImage:'product-4-alt',price:29000000,pieces:3981,age:18,figures:3,category:'batman',brand:'other',stock:true},
+  {id:5,name:'لگو غار بتمن ۳۹۸۱ قطعه کد NO.87085',image:'product-4',altImage:'product-4-alt',price:29000000,pieces:3981,age:18,figures:3,category:'batman',categories:['batman','sets'],brand:'other',stock:true,movable:false,box:true,character:'DC، بتمن',weight:'۶۳۰۱ گرم',dimensions:'۲۲٫۵ × ۴۷٫۵ × ۳۴ سانتی‌متر',updated:'۶ مرداد ۱۴۰۵'},
   {id:6,name:'لگو استاروارز سفینه امپراطوری ۵۳۷۴ قطعه کد NO.85676',image:'product-5',gallery:[{file:'3.webp',alt:'لگو سفینه استاروارز، نمای کامل',width:800,height:800}],price:22990000,pieces:5374,age:18,figures:2,category:'starwars',brand:'other',stock:true},
   {id:7,name:'لگو سوپرمارکت سیمپسون ۲۱۷۹ قطعه کد NO.DP016',image:'product-6',price:21980000,pieces:2179,age:12,figures:6,category:'city',brand:'other',stock:true},
   {id:8,name:'لگو بتمن تابلو گاتهام ۴۲۱۰ قطعه کد NO.MY976',image:'product-7',price:20800000,pieces:4210,age:18,figures:2,category:'batman',brand:'other',stock:true},
